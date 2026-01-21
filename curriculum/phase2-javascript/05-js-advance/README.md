@@ -45,18 +45,6 @@ Before we begin:
     cd curriculum/phase2-javascript/05-js-advanced
     ```
 
-4. **Install dependencies (if any)**
-   <!-- TODO: Remove this section if no need -->
-   ```bash
-   npm install
-   ```
-
-5. **Start the dev server (if applicable)**
-    <!-- TODO: Remove this section if no need -->
-   ```bash
-   npm run dev
-   ```
-
 ## 📄 Code Walkthrough
 
 ---
@@ -161,8 +149,29 @@ console.log(user?.address?.street);
 Prevents errors like: *Cannot read property 'address' of undefined*.
 
 ---
+### 6. Short-Circuiting (`&&` and `||`) and Nullish Coalescing (`??`)
 
-### 6. Objects & Arrays Advanced Techniques
+```js
+// Short-Circuit AND (&&)
+const isLoggedIn = true;
+isLoggedIn && console.log("Welcome back!"); // Only prints if isLoggedIn is true
+
+// Short-Circuit OR (||)
+const userInput = "";
+const nameToDisplay = userInput || "Guest"; // Fallback to "Guest" if userInput is falsy
+console.log(nameToDisplay); // "Guest"
+
+// Nullish Coalescing (??)
+let userScore = null;
+let finalScore = userScore ?? 0; // Only uses 0 if userScore is null or undefined
+console.log(finalScore); // 0
+
+let undefinedName;
+let displayName = undefinedName ?? "Anonymous";
+console.log(displayName); // "Anonymous"
+```
+
+### 7. Objects & Arrays Advanced Techniques
 
 ### Spread Operator
 
@@ -229,7 +238,7 @@ nums.find(n => n > 10); // 12
 
 ---
 
-### 7. Loops (Recap)
+### 8. Loops (Recap)
 
 ### Loop Summary
 
@@ -307,7 +316,7 @@ for (let i = 1; i <= 5; i++) {
 
 ---
 
-## 8. Script Files (Modules)
+## 9. Script Files (Modules)
 
 ES6 modules let you split code into files.
 
@@ -337,17 +346,456 @@ import { calculate as calc } from "./utils.js";
 
 ---
 
---put DOM here--
+## Document Object Model Manipulation
 
---put storage here--
+The DOM (Document Object Model) is how JavaScript sees and interacts with your webpage.
+
+Every tag (`<h1>`, `<p>`, `<button>`, etc.) becomes an object that JS can find, read, or change.
+
+### Selectors
+
+Selectors are how you grab parts of your webpage to manipulate them.
+
+#### 1. `getElementById()`
+Used when an element has a unique ID.
+```html
+<h1 id="title">Hello World</h1>
+```
+```js
+const title = document.getElementById("title");
+console.log(title.textContent);  // "Hello World"
+
+// Change text
+title.textContent = "Welcome to JS!";
+```
+🟢 Explanation:
+* `document.getElementById("title")` finds the element with that ID.
+* `.textContent` gets or changes its text.
+
+#### 2. `getElementByClassName()`
+Selects multiple elements that share the same class name.
+```html
+<p class="highlight">Paragraph 1</p>
+<p class="highlight">Paragraph 2</p>
+```
+```js
+const highlights = document.getElementsByClassName("highlight");
+console.log(highlights[0].textContent); // "Paragraph 1"
+
+// Change style of first element
+highlights[0].style.color = "red";
+```
+🟢 Explanation:
+
+* Returns an `HTMLCollection` (like an array).
+* You can target items using `[index]`.
+* `.style` lets you change CSS properties directly.
+
+#### 3. `document.querySelector()` and `document.querySelectorAll()`
+Modern, flexible, and supports CSS-style selectors.
+```html
+<p class="note">Note 1</p>
+<p class="note">Note 2</p>
+```
+```js
+const firstNote = document.querySelector(".note"); // first match
+firstNote.style.fontWeight = "bold";
+
+const allNotes = document.querySelectorAll(".note"); // get all elements with class "note"
+// Loop through each element one by one
+for (let i = 0; i < allNotes.length; i++) {
+  allNotes[i].style.backgroundColor = "yellow";
+}
+```
+🟢 Explanation:
+* `querySelector()` → returns the first matching element.
+* `querySelectorAll()` → returns all matches (a NodeList).
+* works with CSS selectors like `.class`, `#id`, or `tag`.
+
+### Events and Listeners
+
+Webpages aren’t just for reading — they react.
+
+Events are how you make your site interactive, responding to clicks, hovers, key presses, etc.
+
+#### Basic Button Click
+```html
+<button id="myBtn">Click Me</button>
+<p id="msg">Hello!</p>
+```
+```js
+const btn = document.getElementById("myBtn");
+const msg = document.getElementById("msg");
+
+// Directly change text when button is clicked
+btn.addEventListener("click", function() {
+    msg.textContent = "You clicked the button!";
+});
+```
+🟢 Explanation:
+* `addEventListener("click", function() { ... })` listens for a click.
+* When it happens, your function runs.
+* It’s like saying, “Hey, when someone touches this, do that.”
+
+#### Event Delegation
+
+```html
+<h1>Click me to make me bold!</h1>
+<p>Click me too!</p>
+```
+```js
+// Listen for clicks on the whole page
+document.body.addEventListener("click", function(e) {
+// Toggle bold on the clicked element
+    if (e.target.style.fontWeight === "bold") {
+        e.target.style.fontWeight = "normal"; // turn off bold
+    } 
+    else {
+        e.target.style.fontWeight = "bold";   // make bold
+    }
+});
+```
+🟢 Explanation:
+* `document.body` listens to all clicks inside the page.
+* `e.target` tells you which element was clicked.
+* This technique is called event delegation — useful when you have many clickable elements.
+
+### Summary of DOM Manipulation
+
+| Action                  | Method                               | Returns        | Typical Use                          |
+| ----------------------- | ------------------------------------ | -------------- | ------------------------------------ |
+| Get element by ID       | `getElementById("id")`               | Single element | When targeting one unique thing      |
+| Get elements by class   | `getElementsByClassName("class")`    | HTMLCollection | When multiple elements share a class |
+| CSS-style query (first) | `querySelector("selector")`          | Single element | Modern, flexible targeting           |
+| CSS-style query (all)   | `querySelectorAll("selector")`       | NodeList       | Loop through all matching elements   |
+| React to user actions   | `addEventListener("event", handler)` | —              | Make your page interactive           |
+
+### 🧪 Quick Practice: Change text color when a button is clicked.
+#### 1. Move the code from `script.js` to `libraries.js`
+#### 2. In `index.html`, attach an ID to heading 1 and the button
+```html
+<body>
+    <h1 id="title">Javascript!</h1>
+    <button id="colour-btn">This is a button</button>
+    <script src="script.js"></script>
+</body>
+```
+#### 3. In `script.js`, access the elements by their IDs
+```js
+let title = document.getElementById("title");
+let button = document.getElementById("colour-btn");
+```
+#### 4. Add an event listener to the button below the initialisation
+```js
+button.addEventListener("click", function() {
+
+});
+```
+#### 5. Write the code that changes the colour of the title
+```js
+button.addEventListener("click", function() {
+    title.style.color = "red";
+});
+```
+#### 6. Try other colour and confirm that the code works as intended
+```js
+button.addEventListener("click", function() {
+    title.style.color = "green";
+});
+```
+#### 7. Extra: We can apply conditionals to make the button more interactive
+```js
+button.addEventListener("click", function() {
+    if (title.style.color == "green"){
+        title.style.color = "red";
+    }
+    else {
+        title.style.color = "green";
+    }
+});
+```
+## 🧪 Mini Project B - To-do List
+### Here is the starter code:
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Lesson 4 ITCamp - Mini Project B</title>
+    </head>
+    <body>
+        <h1 id = "title">To-do List</h1>
+        <script src="script.js"></script>
+    </body>
+</html>
+```
+### Brainstorming the ideas
+#### 1. User types a task in the input box -> need input space
+#### 2. Clicking “Add Task” (or pressing Enter) adds it to the list -> need a button to add task, need a list to store the tasks
+#### 3. Clicking a task toggles its completion status -> need certain style on the text, and a state called completed
+
+### Start coding
+#### 1. Remove the code in `script.js`.
+#### 2. Add input space, an add-task button, and a list to store the tasks.
+```html
+<body>
+    <h1 id = "title">To-do List</h1>
+    <!-- this is the input space -->
+    <input id="taskInput" placeholder="Type a task..." />  
+    <!-- this is the button used to add tasks to the list -->
+    <button id="addBtn">Add</button>
+    <!-- this is the list that displays the tasks -->
+    <ul id="taskList"></ul>
+    <script src="script.js"></script>
+</body>
+```
+#### 3. Add the state "completed" using CSS.
+```html
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson 4 ITCamp - Mini Project B</title>
+    <style>
+        .completed {
+        text-decoration: line-through; /*when completed, the task is crossed*/
+        color: gray; /*the colour is then changed to grey*/ 
+        }
+        body { 
+            font-family: sans-serif; 
+            padding: 20px; 
+        }
+        input { 
+            margin-right: 8px; 
+        }
+    </style>
+</head>
+```
+#### 4. In `script.js`, access the elements by their IDs
+```js
+const input = document.getElementById('taskInput');
+const addBtn = document.getElementById('addBtn');
+const list = document.getElementById('taskList');
+```
+#### 5. Below the initialisations, attach an event listener to the button
+```js
+addBtn.addEventListener('click', function() {
+
+});
+```
+#### 6. Add a code to put user's input inside the text variable and handle empty input
+```js
+addBtn.addEventListener('click', function() {
+    const text = input.value.trim();        // remove extra spaces
+    if (text === '') return;               // ignore empty input
+});
+```
+#### 7. Add this code to actually create the task in the list
+```js
+addBtn.addEventListener('click', function() {
+    const text = input.value.trim();        // remove extra spaces
+    if (text === '') return;               // ignore empty input
+    const li = document.createElement('li'); // create a list item
+    li.textContent = text;                   // set its text
+    list.appendChild(li); // put new task into the list
+});
+```
+#### 8. Clear input for the next task
+```js
+addBtn.addEventListener('click', function() {
+    const text = input.value.trim();        // remove extra spaces
+    if (text === '') return;               // ignore empty input
+    const li = document.createElement('li'); // create a list item
+    li.textContent = text;                   // set its text
+    list.appendChild(li); // put new task into the list
+    input.value = '';     // clear input for next task
+});
+```
+#### 9. Make clicking a task toggles its completion status
+```js
+addBtn.addEventListener('click', function() {
+    const text = input.value.trim();        // remove extra spaces
+    if (text === '') return;               // ignore empty input
+
+    const li = document.createElement('li'); // create a list item
+    li.textContent = text;                   // set its text
+
+    // when clicked, toggle completed look
+    li.addEventListener('click', function(e) {
+    // e.target is the element that was clicked (the <li>)
+    e.target.classList.toggle('completed');
+    });
+
+    list.appendChild(li); // put new task into the list
+    input.value = '';     // clear input for next task
+});
+```
+#### 10. Enable clicking enter to add the task
+```js
+//Add this below the button event listener
+input.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter'){
+        
+    };
+});
+```
+#### 11. Copy the function inside button event listener and paste it inside input event listener
+```js
+input.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter'){
+        const text = input.value.trim();        // remove extra spaces
+        if (text === '') return;               // ignore empty input
+
+        const li = document.createElement('li'); // create a list item
+        li.textContent = text;                   // set its text
+
+        // when clicked, toggle completed look
+        li.addEventListener('click', function(e) {
+            // e.target is the element that was clicked (the <li>)
+            e.target.classList.toggle('completed');
+        });
+
+        list.appendChild(li); // put new task into the list
+        input.value = '';     // clear input for next task
+    };
+});
+```
+### You might think that this is not the best practice. Let's use function to increase the modularity of the code!
+#### 12. Refactor the code by making a function called `addTask()`
+```js
+function addTask(){
+    const text = input.value.trim();        // remove extra spaces
+    if (text === '') return;               // ignore empty input
+
+    const li = document.createElement('li'); // create a list item
+    li.textContent = text;                   // set its text
+
+    // when clicked, toggle completed look
+    li.addEventListener('click', function(e) {
+        // e.target is the element that was clicked (the <li>)
+        e.target.classList.toggle('completed');
+    });
+
+    list.appendChild(li); // put new task into the list
+    input.value = '';     // clear input for next task
+}
+```
+#### 13. Edit the event listeners code
+```js
+addBtn.addEventListener('click', addTask);
+
+input.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter'){
+        addTask();
+    };
+});
+```
+
+### Your code should look approximately like this
+#### `index.html`:
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Lesson 4 ITCamp - Mini Project B</title>
+        <style>
+            .completed {
+            text-decoration: line-through; /*when completed, the task is crossed*/
+            color: gray; /*the colour is then changed to grey*/ 
+            }
+            body { 
+                font-family: sans-serif; 
+                padding: 20px; 
+            }
+            input { 
+                margin-right: 8px; 
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id = "title">To-do List</h1>
+        <input id="taskInput" placeholder="Type a task..." />
+        <button id="addBtn">Add</button>
+        <ul id="taskList"></ul>
+        <script src="script.js"></script>
+    </body>
+</html>
+```
+#### `script.js`:
+```js
+const input = document.getElementById('taskInput');
+const addBtn = document.getElementById('addBtn');
+const list = document.getElementById('taskList');
+
+addBtn.addEventListener('click', addTask);
+
+input.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter'){
+        addTask();
+    };
+});
+
+function addTask(){
+    const text = input.value.trim();        // remove extra spaces
+    if (text === '') return;               // ignore empty input
+
+    const li = document.createElement('li'); // create a list item
+    li.textContent = text;                   // set its text
+
+    // when clicked, toggle completed look
+    li.addEventListener('click', function(e) {
+        // e.target is the element that was clicked (the <li>)
+        e.target.classList.toggle('completed');
+    });
+
+    list.appendChild(li); // put new task into the list
+    input.value = '';     // clear input for next task
+}
+```
+
+## Data Persistence (Optional)
+
+*Focus: Saving data so it survives a page refresh.*
+
+### Local Storage Basics
+
+- **Concept:** The browser's built-in mini-database.
+- **Methods:** 
+  - `localStorage.setItem('key', 'value')` — save data
+  - `localStorage.getItem('key')` — retrieve data
+
+### JSON Handling
+
+- **Problem:** LocalStorage only saves strings. Saving arrays or objects directly breaks the code.
+- **Solution:** Use JSON to convert between strings and arrays/objects.
+  - `JSON.stringify()` — converts array/object → string for saving
+  - `JSON.parse()` — converts string → array/object for loading
+
+### Code Example
+
+```js
+// Example array of contacts
+const contacts = [
+  { name: "Alice", phone: "12345" },
+  { name: "Bob", phone: "67890" }
+];
+
+// Save to localStorage
+localStorage.setItem('contacts', JSON.stringify(contacts));
+
+// Load from localStorage
+const savedContacts = JSON.parse(localStorage.getItem('contacts'));
+
+console.log(savedContacts);
+// Output: [
+//   { name: "Alice", phone: "12345" },
+//   { name: "Bob", phone: "67890" }
+// ]
+```
 
 
 ## 🧪 Exercises
 
-<!-- TODO: Depends on you -->
-* 🏁 Starter Exercise: ...
-* 🔧 Modify This Component: ...
-* 🧠 Thought Question: ...
+Please do `exercise1.js`, `exercise2.js`, and a mini project consisting of `data.js` and `main.js`. Don't forget to change the script `src` in `index.html` file accordingly.
 
 ## 🛠️ Pushing Your Work
 

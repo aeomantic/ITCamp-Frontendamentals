@@ -1,24 +1,21 @@
-<!-- HANDS ON CHALLENGE -->
+// <!-- HANDS ON CHALLENGE -->
 
-<!-------------------------------------------------------------------------------------------------------------->
-
-<!-- 1. New Contact Page -->
-<!-- Uncomment and copy paste to your own folder -->
-
- <!-- export default function Contact() {
+//1. Add New Contact Page
+export default function Contact() {
     return (
         <div>
             <h1>Contact Page</h1>
         </div>
     )
-} -->
+} 
 
-<!-------------------------------------------------------------------------------------------------------------->
+//=================================================================================
 
-<!-- 2. Update the Navbar to include contact page
-Make a section for CTA (Call to action) -->
+//2. Update the Navbar to include contact page
 
-<!-- import Link from "next/link";
+// Make a section for CTA (Call to action)
+
+import Link from "next/link";
 
 export default function Navbar() {
     return (
@@ -43,12 +40,13 @@ export default function Navbar() {
             </div>
         </nav>
     );
-} -->
+} 
 
-<!-------------------------------------------------------------------------------------------------------------->
+//=================================================================================
 
-<!-- 3. Make a section for CTA (Call to action) -->
-<!-- import Button from "../button.js";
+// 3. Make a section for CTA (Call to action)
+
+import Button from "../button.js";
 
 export default function CTA() {
     return (
@@ -63,13 +61,12 @@ export default function CTA() {
             </div>
         </section>
     )
-} -->
+} 
 
-<!-------------------------------------------------------------------------------------------------------------->
-
-<!-- 4. Add a footer and update the layout -->
+//=================================================================================
+// 4. Add a footer and update the layout -->
  
-<!-- import Navbar from "../component/navbar";
+import Navbar from "../component/navbar";
 import Footer from "../component/footer";
 import "./globals.css";
 
@@ -83,4 +80,4 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-} -->
+} 
